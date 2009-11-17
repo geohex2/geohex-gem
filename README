@@ -1,0 +1,80 @@
+= geohex-gem
+
+== DESCRIPTION:
+
+GeoHex Gem for Ruby created by hal_sk
+http://twitter.com/hal_sk_e  (en)
+http://twitter.com/hal_sk  (ja)
+
+GeoHex is a latitude/longitude encoding system invented by sa3da.
+GeoHex divides geometry regions into hexagonal grid and set an unique identifier to each grid. It supports only Japan region so far. The coding idea is opened under the Creative Commons Attribution 2.1 Japan Lisence.
+http://geogames.net/labs/geohex
+
+This GeoHex Ruby library can convert latitude/longitude to GeoHex code on both sides.
+
+== Features/PROBLEMS:
+
+* Encode to Geohex format to an arbitrary level of precision
+* Decode from Geohex format to an arbitrary level of precision
+
+== INSTALLATION
+
+== USAGE
+
+  require 'rubygems'
+  require 'geohash'
+
+  GeoHash.decode('f77')
+  => [63.98438, -73.82813]
+
+  GeoHash.encode(39.51, -76.24)
+  => "dr1bc0edrj"
+  
+  # Decode a geohash to a bounding box
+  decode_bbox('dqcw4')
+  => [39.0234375, -76.552734375], [39.0673828125, -76.5087890625]]
+  
+You can encode or decode to an arbitrary level of precision:
+
+# Encode latitude and longitude to a geohash with precision digits
+encode(lat, lon, precision=10)
+
+# Decode a geohash to a latitude and longitude with decimals digits
+decode(geohash, decimals=5)
+
+Have fun with this!  GeoHash is the new black.
+
+== INSTALLATION
+
+1) Enable gems from github, if you haven't already done so (rubygems >= 1.2):
+    > sudo gem sources -a http://gems.github.com
+
+2) Install gem
+    > sudo gem install davetroy-geohash
+
+3) Profit!
+
+== LICENSE:
+
+(The MIT License)
+
+Copyright (c) 2008 David Troy, Roundhouse Technologies LLC
+
+Permission is hereby granted, free of charge, to any person obtaining
+a copy of this software and associated documentation files (the
+'Software'), to deal in the Software without restriction, including
+without limitation the rights to use, copy, modify, merge, publish,
+distribute, sublicense, and/or sell copies of the Software, and to
+permit persons to whom the Software is furnished to do so, subject to
+the following conditions:
+
+The above copyright notice and this permission notice shall be
+included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED 'AS IS', WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
