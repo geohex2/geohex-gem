@@ -6,7 +6,7 @@ GeoHex Gem for Ruby created by hal_sk
 http://twitter.com/hal_sk_e  (en)
 http://twitter.com/hal_sk  (ja)
 
-GeoHex is a latitude/longitude encoding system invented by sa3da.
+GeoHex is a latitude/longitude encoding system invented by sa2da.
 GeoHex divides geometry regions into hexagonal grid and set an unique identifier to each grid. It supports only Japan region so far. The coding idea is opened under the Creative Commons Attribution 2.1 Japan Lisence.
 http://geogames.net/labs/geohex
 
@@ -14,45 +14,16 @@ This GeoHex Ruby library can convert latitude/longitude to GeoHex code on both s
 
 == Features/PROBLEMS:
 
-* Encode to Geohex format to an arbitrary level of precision
-* Decode from Geohex format to an arbitrary level of precision
+* Encode to GeoHex format to an arbitrary level of precision
+* Decode from GeoHex format to an arbitrary level of precision
 
 == INSTALLATION
 
 == USAGE
 
-  require 'rubygems'
-  require 'geohash'
-
-  GeoHash.decode('f77')
-  => [63.98438, -73.82813]
-
-  GeoHash.encode(39.51, -76.24)
-  => "dr1bc0edrj"
-  
-  # Decode a geohash to a bounding box
-  decode_bbox('dqcw4')
-  => [39.0234375, -76.552734375], [39.0673828125, -76.5087890625]]
-  
 You can encode or decode to an arbitrary level of precision:
 
-# Encode latitude and longitude to a geohash with precision digits
-encode(lat, lon, precision=10)
-
-# Decode a geohash to a latitude and longitude with decimals digits
-decode(geohash, decimals=5)
-
-Have fun with this!  GeoHash is the new black.
-
 == INSTALLATION
-
-1) Enable gems from github, if you haven't already done so (rubygems >= 1.2):
-    > sudo gem sources -a http://gems.github.com
-
-2) Install gem
-    > sudo gem install davetroy-geohash
-
-3) Profit!
 
 == LICENSE:
 
