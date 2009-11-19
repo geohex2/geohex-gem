@@ -3,6 +3,7 @@
 # author Haruyuki Seki 
 #
 class GeoHex
+
   H_KEY       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX'
 
   MIN_X_LON   = 122930.0 #与那国島
@@ -12,6 +13,8 @@ class GeoHex
   H_GRID      = 1000
   H_SIZE      = 0.5
   
+  attr_accessor :code
+
   # latlon to geohex
   def self.encode(lat,lon,level=7)
     raise ArgumentError, "latitude must be between -90 and 90" if (lat < -90 || lat > 90)
@@ -63,7 +66,13 @@ class GeoHex
     return  lat, lon, level 
   end
 
-
+  def initialize(lat,lon,level=7)
+    @code = GeoHex.encode(lat,lon,level)
+    #@lat = lat
+    #@lon = lon
+    #@level = level
+    #@center_lat = 
+  end
 
 
 
