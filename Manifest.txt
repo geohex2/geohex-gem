@@ -1,0 +1,8 @@
+.autotest
+History.txt
+Manifest.txt
+README.markdown
+Rakefile
+bin/geohex
+lib/geohex.rb
+spec/geohex_spec.rb
