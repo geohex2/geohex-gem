@@ -26,6 +26,21 @@ describe GeoHex do
     #hex.lng == 139.7173629550321
     
   end
+  it "should convert geohex to coordinates " do
+    # simple test
+    GeoHex.decode('132KpuG').should == [35.6478085,139.7173629550321,1]
+    #GeoHex.encode(24.340565,124.156201,42).should == 'G028k'
+
+    # correct answers (you can obtain this test variables from jsver_test.html )
+    #correctdata = '{' + File.open("#{File.dirname(__FILE__)}/testdata.txt").read + '}'
+    #eval(correctdata).each_pair do |k,v|
+    #  GeoHex.encode(v[0],v[1],v[2]).should == k
+    #end
+    
+    #hex.lat == 35.6478085
+    #hex.lng == 139.7173629550321
+    
+  end
 end
 
 

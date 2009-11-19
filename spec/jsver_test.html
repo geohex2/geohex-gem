@@ -21,17 +21,33 @@ function testjs(){
   }
   ret = ret + '</textarea>';
   document.getElementById('result').innerHTML = ret;
-  
+
+  ret = '<textarea cols="40" rows="40">';
+  for ( var i in testdata ){
+    ll = testdata[i];
+    for ( var p = 1; p < 61; p++){
+      zone = getZoneByLocation(ll[0],ll[1],p);
+      ret = ret + "'" + zone.code + "' => [" + zone.lat + "," + zone.lon + "," + p + "],\n";
+    }
+  }
+  ret = ret + '</textarea>';
+  document.getElementById('result2').innerHTML = ret;
+
 }
+
 </script>
 </head>
 
 <body onload="testjs();">
+<h2>latlng2geohex</h2>
 <div id="result">
 </div>
   
+<h2>geohex2latlng</h2>
+<div id="result2">
+</div>
 
 <hr>
 <address></address>
-<!-- hhmts start --> Last modified: Thu Nov 19 14:55:01 JST 2009 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Thu Nov 19 16:35:57 JST 2009 <!-- hhmts end -->
 </body> </html>
