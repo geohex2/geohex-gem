@@ -11,16 +11,15 @@ function testjs(){
   testdata = [[35.647401, 139.716911],   // 渋谷
               [43.055248, 141.345505],   // 北海道
               [24.340565, 124.156201]];  // 沖縄
-  ret = '<ul>';
+  ret = '<textarea cols="40" rows="40">';
   for ( var i in testdata ){
     ll = testdata[i];
-    ret = ret + '<h2>' + ll[0] + ',' + ll[1] + '</h2>';
     for ( var p = 1; p < 61; p++){
       zone = getZoneByLocation(ll[0],ll[1],p);
-      ret = ret + '<li>level ' + p + ' : ' + zone.code + ':' + zone.lat + ',' + zone.lon + '</li>';
+      ret = ret + "'" + zone.code + "' => [" + ll[0] + "," + ll[1] + "," + p + "],\n";
     }
   }
-  ret = ret + '</ul>';
+  ret = ret + '</textarea>';
   document.getElementById('result').innerHTML = ret;
   
 }
@@ -34,5 +33,5 @@ function testjs(){
 
 <hr>
 <address></address>
-<!-- hhmts start --> Last modified: Tue Nov 17 19:01:07 JST 2009 <!-- hhmts end -->
+<!-- hhmts start --> Last modified: Thu Nov 19 14:55:01 JST 2009 <!-- hhmts end -->
 </body> </html>
