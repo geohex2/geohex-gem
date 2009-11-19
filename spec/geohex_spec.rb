@@ -43,6 +43,22 @@ describe GeoHex do
     GeoHex.new(35.647401,139.716911,1).code.should == '132KpuG'
     GeoHex.new(35.647401,139.716911,60).code.should == '032Lq'
   end
+
+  it "should raise error if instancing with nil data " do
+    lambda { GeoHex.new }.should raise_error(ArgumentError)
+  end
+  it "should return instance from hexcode " do
+    geohex = GeoHex.new('132KpuG')
+    geohex.lat.should == 35.6478085
+    geohex.lon.should == 139.7173629550321
+    geohex.level.should == 1
+
+    geohex = GeoHex.new('0016C')
+    geohex.lat.should == 24.305370000000003
+    geohex.lon.should == 124.17423982869379
+    geohex.level.should == 60
+
+  end
 end
 
 

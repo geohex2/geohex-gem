@@ -13,7 +13,19 @@ class GeoHex
   H_GRID      = 1000
   H_SIZE      = 0.5
   
-  attr_accessor :code
+  attr_accessor :code, :lat, :lon, :level
+
+  def initialize(*params)
+    if params.first.is_a?(Float)
+      @lat,@lon = params[0],params[1]
+      @level= params[2]||7 
+      @code = GeoHex.encode(@lat,@lon,@level)
+    else
+      @code = params.first
+      @lat,@lon,@level=GeoHex.decode(@code)
+    end
+    #@center_lat = 
+  end
 
   # latlon to geohex
   def self.encode(lat,lon,level=7)
@@ -64,14 +76,6 @@ class GeoHex
     lon      = h_lon / H_GRID
 
     return  lat, lon, level 
-  end
-
-  def initialize(lat,lon,level=7)
-    @code = GeoHex.encode(lat,lon,level)
-    #@lat = lat
-    #@lon = lon
-    #@level = level
-    #@center_lat = 
   end
 
 
