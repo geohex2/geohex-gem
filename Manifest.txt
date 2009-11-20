@@ -1,8 +1,6 @@
-.autotest
 History.txt
 Manifest.txt
-README.markdown
+README.txt
 Rakefile
-bin/geohex
 lib/geohex.rb
 spec/geohex_spec.rb

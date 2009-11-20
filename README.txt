@@ -1,3 +1,7 @@
+= geohex
+
+* http://geohex.rubyforge.org/
+
 ## GEOHEX DESCRIPTION
 GeoHex Gem for Ruby (c) 2009 Haruyuki Seki
 http://twitter.com/hal_sk_e  (en)

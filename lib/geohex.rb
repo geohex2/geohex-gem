@@ -3,6 +3,7 @@
 # author Haruyuki Seki 
 #
 class GeoHex
+  VERSION = '1.0.0'
 
   H_KEY       = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWX'
 

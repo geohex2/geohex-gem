@@ -4,7 +4,7 @@ require 'rubygems'
 require 'hoe'
 
 Hoe.spec 'geohex' do
-  # developer('FIX', 'FIX@example.com')
+  developer('hal_sk', 'hal.marsellus@gmail.com')
 
   # self.rubyforge_name = 'geohexx' # if different than 'geohex'
 end
