@@ -55,7 +55,7 @@ http://geogames.net
 This ruby code is covered by MIT License.
 (The MIT License)
 
-Copyright (c) 2008 David Troy, Roundhouse Technologies LLC
+Copyright (c) 2009 Haruyuki SEKI 
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
