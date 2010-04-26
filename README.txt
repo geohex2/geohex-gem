@@ -45,6 +45,14 @@ http://twitter.com/hal_sk  (ja)
 
 ## LICENSE
 
+NOTE: 
+The idea of GeoHex is licensed by sa2da. 
+You should follow original license of GeoHex.
+(The license is opened by CC-BY-SA license)
+You must attribute this work to sa2da (with link).
+http://geogames.net
+
+This ruby code is covered by MIT License.
 (The MIT License)
 
 Copyright (c) 2008 David Troy, Roundhouse Technologies LLC
