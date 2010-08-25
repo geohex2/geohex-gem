@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 #
 # ported from perl libraries http://svn.coderepos.org/share/lang/perl/Geo-Hex/trunk/lib/Geo/Hex.pm
 # author Haruyuki Seki 
@@ -17,6 +18,7 @@ class GeoHex
   attr_accessor :code, :lat, :lon, :level
 
   def initialize(*params)
+    raise ArgumentError if params.count == 0
     if params.first.is_a?(Float)
       @lat,@lon = params[0],params[1]
       @level= params[2]||7 
