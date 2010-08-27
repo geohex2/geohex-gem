@@ -16,22 +16,14 @@ describe GeoHex do
     lambda { GeoHex.encode(0,-180,25) }.should raise_error(ArgumentError) # invalid level
   end
   it "should convert coordinates to geohex code" do
-    # simple test
-    GeoHex.encode(35.647401,139.716911,1).should == '132KpuG' 
-    GeoHex.encode(24.340565,124.156201,42).should == 'G028k'
-
     # correct answers (you can obtain this test variables from jsver_test.html )
     @correct_ll2hex.each_pair do |k,v|
-      GeoHex.encode(v[0],v[1],v[2]).should == k
+      GeoHex.encode(k[0],k[1],k[2]).should == v
     end
     
   end
   it "should convert geohex to coordinates " do
-    # simple test
-    GeoHex.decode('132KpuG').should == [35.6478085,139.7173629550321,1]
-    GeoHex.decode('70dMV').should ==  [24.338279000000004,124.1577708779443,7]
-    GeoHex.decode('0dMV').should ==  [24.338279000000004,124.1577708779443,7]
-
+  pending
     # correct answers (you can obtain this test variables from jsver_test.html )
     @correct_hex2ll.each_pair do |k,v|
       GeoHex.decode(k).should == v
@@ -40,14 +32,17 @@ describe GeoHex do
   end
 
   it "should return instance from coordinates " do
+  pending
     GeoHex.new(35.647401,139.716911,1).code.should == '132KpuG'
     GeoHex.new(35.647401,139.716911,60).code.should == '032Lq'
   end
 
   it "should raise error if instancing with nil data " do
+  pending
     lambda { GeoHex.new }.should raise_error(ArgumentError)
   end
   it "should return instance from hexcode " do
+  pending
     geohex = GeoHex.new('132KpuG')
     geohex.lat.should == 35.6478085
     geohex.lon.should == 139.7173629550321
