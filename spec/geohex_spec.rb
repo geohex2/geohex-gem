@@ -8,12 +8,12 @@ describe GeoHex do
   
   it "should throw error if parameters is not valid" do
     lambda { GeoHex.encode() }.should raise_error(ArgumentError) # no parameters
-    lambda { GeoHex.encode(-91,100,1) }.should raise_error(ArgumentError) # invalid latitude
-    lambda { GeoHex.encode(91,100,1) }.should raise_error(ArgumentError) # invalid latitude
-    lambda { GeoHex.encode(90,181,1) }.should raise_error(ArgumentError) # invalid longitude
-    lambda { GeoHex.encode(-90,-181,1) }.should raise_error(ArgumentError) # invalid longitude
-    lambda { GeoHex.encode(0,180,0) }.should raise_error(ArgumentError) # invalid level
-    lambda { GeoHex.encode(0,-180,61) }.should raise_error(ArgumentError) # invalid level
+    lambda { GeoHex.encode(-86,100,0) }.should raise_error(ArgumentError) # invalid latitude
+    lambda { GeoHex.encode(86,100,0) }.should raise_error(ArgumentError) # invalid latitude
+    lambda { GeoHex.encode(85,181,0) }.should raise_error(ArgumentError) # invalid longitude
+    lambda { GeoHex.encode(-85,-181,0) }.should raise_error(ArgumentError) # invalid longitude
+    lambda { GeoHex.encode(0,180,-1) }.should raise_error(ArgumentError) # invalid level
+    lambda { GeoHex.encode(0,-180,25) }.should raise_error(ArgumentError) # invalid level
   end
   it "should convert coordinates to geohex code" do
     # simple test
