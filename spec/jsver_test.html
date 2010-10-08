@@ -10,8 +10,6 @@
 <META http-equiv="cache-control" content="no-cache" />
 <TITLE>GeoHex.net</TITLE>
 <script src="hex_v2.js" type="text/javascript" content="text/html; charset=Shift-JIS"></script>
-<script src="./lib/proj4js.js" content="text/html; charset=shift-jis"></script>
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <script type="text/javascript">
     var watchID ="";
     var key=new Array();
@@ -19,8 +17,6 @@
     var scl = 16;
     var map;
     var infowin;
-    var startpos = new google.maps.LatLng(35.68092, 139.76740);
-    initProj4js();
 
     function initialize() {
   ret = '<textarea cols="60" rows="60">';
@@ -36,17 +32,19 @@
                         [35.68052783324247,139.76589796295167], // 東京
                         [35.647401, 139.716911],   // 渋谷
                         [43.055248, 141.345505],   // 北海道
-                        [24.340565, 124.156201]];  // 沖縄
+                        [24.340565, 124.156201],  // 沖縄
+                        [85.0511188263601, 140.562289953232]];
+             var zone = GeoHex.getZoneByLocation(85,180,18);
+
              for ( var i in testdata ){
                ll = testdata[i];
                for ( var p = 0; p < 25; p++){
-                 console.log(ll[0] + ',' + ll[1] + ':' + p);
-                 var zone = getZoneByLocation(ll[0], ll[1], p);
-                 ret = ret + "[" + ll[0] + "," + ll[1] + "," + p + "] => '" + zone.code + "',\n";
-                 console.log(zone.code + ',' + zone.lat + ',' + zone.lon);
+                 //var zone = GeoHex.getZoneByLocation(ll[0], ll[1], p);
+                 //ret = ret + "[" + ll[0] + "," + ll[1] + "," + p + "] => '" + zone.code + "',\n";
                }
 
              }
+             console.log(GeoHex.getZoneByLocation(85.0511188263601, 140.562289953232, 19).code);
   ret = ret + '</textarea>';
   document.getElementById('result').innerHTML = ret;
 
@@ -54,13 +52,20 @@
   for ( var i in testdata ){
     ll = testdata[i];
     for ( var p = 1; p < 61; p++){
-      zone = getZoneByLocation(ll[0],ll[1],p);
-      ret = ret + "'" + zone.code + "' => [" + zone.lat + "," + zone.lon + "," + p + "],\n";
+      //zone = GeoHex.getZoneByLocation(ll[0],ll[1],p);
+      //ret = ret + "'" + zone.code + "' => [" + zone.lat + "," + zone.lon + "," + p + "],\n";
     }
   }
   ret = ret + '</textarea>';
   document.getElementById('result2').innerHTML = ret;
 
+  ret = '<textarea cols="60" rows="60">';
+  for ( var i in testdata ){
+    ll = testdata[i];
+//    ret +=  GeoHex.loc2xy(ll[0],ll[1]);
+  }
+  ret = ret + '</textarea>';
+  document.getElementById('result3').innerHTML = ret;
 
 }
 
@@ -98,7 +103,7 @@
 <body onload="initialize()">
     <div style="width:100%;background-color:#cdcdcd;">
 
-    <div style="width:100%;background-color:#cccccc;border-bottom:1px solid #999999;height:24px;background:url(/hex_logo.gif) no-repeat 0 0;top:0px;left:0px;"><div id="level_r"></div><div style="margin-left:100px;"></div></div></div>
+    <div ><div id="level_r"></div><div style="margin-left:100px;"></div></div></div>
     <div id="map_canvas" style="width: 100%;"></div>
     <h2>latlng2geohex</h2>
     <div id="result" style="width: 100%;"></div>
@@ -107,9 +112,10 @@
 <div id="result2">
 </div>
     
-    <div style="width:100%;background-color:#000000;border-bottom:1px solid #999999;height:24px;filter:alpha(opacity=90);-moz-opacity:0.90;opacity:0.90;color:#ffffff;font-size:11px;font-family:sans-serif;"><div style="margin:5px;" id="copy">Copyright &copy;&nbsp;&nbsp;<a  style="text-decoration:none;" href="http://geogames.net/">geogames.net</a><div id="sb" style="float:right;font-size:11px;"><a rel="license" href="http://creativecommons.org/licenses/by-sa/2.1/jp/"><img alt="Creative Commons License" style="border-width:0" src="http://i.creativecommons.org/l/by-sa/2.1/jp/80x15.png" /></a><div style="display:none;"><span xmlns:dc="http://purl.org/dc/elements/1.1/" property="dc:title">GeoHex</span> by <a xmlns:cc="http://creativecommons.org/ns#" href="http://geogames.net" property="cc:attributionName" rel="cc:attributionURL">sa2da</a> is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/2.1/jp/">Creative Commons &#34920;&#31034;-&#32153;&#25215; 2.1 &#26085;&#26412; License</a>.</div><br /></div></div>
+    <h2>loc2xy</h2>
+<div id="result3">
+</div>
 
-    </div>
 
 </body>
 </html>
