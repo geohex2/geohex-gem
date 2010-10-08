@@ -44,28 +44,91 @@
                }
 
              }
-             console.log(GeoHex.getZoneByLocation(85.0511188263601, 140.562289953232, 19).code);
+
   ret = ret + '</textarea>';
   document.getElementById('result').innerHTML = ret;
 
   ret = '<textarea cols="60" rows="60">';
+             testdata = ['aaa',
+'aac',
+'bca',
+'bcg',
+'bdc',
+'ccd',
+'ced',
+'cke',
+'did',
+'dif',
+'dui',
+'eEo',
+'eqh',
+'esh',
+'faaAn',
+'faaAp',
+'fbau4',
+'gbam3',
+'gbao1',
+'gcbEa',
+'hca0R',
+'hcayT',
+'hfcwc',
+'iebQJ',
+'iebQL',
+'ikeIe',
+'jjdK3',
+'jjdK5',
+'jvi0i',
+'kGqSo',
+'ktg6X',
+'kth4b',
+'laaDneV',
+'laaDneX',
+'lbaz6K2',
+'mbas1gR',
+'mbas1iR',
+'mcbPe8U',
+'ncaAToN',
+'ncaATqL',
+'nfcHjgQ',
+'ofbmP47',
+'ole0tmI',
+'pkdzHcf',
+'pwiQDy2',
+'qIsXeGc',
+'quhO0el',
+'quhO0en',
+'raaFoEQkv',
+'raaFoEQkx',
+'rba583BCM',
+'sbax3uIy9',
+'sbax3uIyB',
+'sdbcjXpoC',
+'tcaKXE3Gp',
+'tcaKXE3Ip',
+'tgcfsW54q',
+'ufb7WvW25',
+'ufb7WvW27',
+'umelBUcUA',
+'vldgVGVWf',
+'vldgVGVWh',
+'vyjxoRfOq',
+'wMsL2LkE8',
+'wwhnTzSWn',
+'wwhnTzSWp',
+'xaaIp0PPMW3',
+'xaaIp0PPMW5',
+'xbaBA9U9v2c',
+'yba25RHHBWb',
+'yba25RHHBWd',
+'ydbpnlQkGWa'
+];
+  console.log(testdata)
   for ( var i in testdata ){
-    ll = testdata[i];
-    for ( var p = 1; p < 61; p++){
-      //zone = GeoHex.getZoneByLocation(ll[0],ll[1],p);
-      //ret = ret + "'" + zone.code + "' => [" + zone.lat + "," + zone.lon + "," + p + "],\n";
-    }
+      var zone = GeoHex.getZoneByCode(testdata[i]);
+      ret = ret + zone.code + "," + zone.lat + "," + zone.lon + ","+ zone.getLevel() + "\n";
   }
   ret = ret + '</textarea>';
   document.getElementById('result2').innerHTML = ret;
-
-  ret = '<textarea cols="60" rows="60">';
-  for ( var i in testdata ){
-    ll = testdata[i];
-//    ret +=  GeoHex.loc2xy(ll[0],ll[1]);
-  }
-  ret = ret + '</textarea>';
-  document.getElementById('result3').innerHTML = ret;
 
 }
 

@@ -3,20 +3,19 @@ require "pp"
 include GeoHex
 
 describe GeoHex do
-  it "lat lon to xy" do
-    pending
-    GeoHex.__loc2xy(0,0).should == [0,0]
-  end
-end
-
-
-describe GeoHex do
   before(:all) do
-    @test_data = []
-    File.open("#{File.dirname(__FILE__)}/location_data.txt").read.each_line do |l|
+    @test_ll2hex = []
+    @test_hex2ll = []
+    File.open("#{File.dirname(__FILE__)}/testdata_ll2hex.txt").read.each_line do |l|
       if l.slice(0,1) != "#"
         d = l.strip.split(',')
-        @test_data << [d[0].to_f, d[1].to_f, d[2].to_i, d[3]]
+        @test_ll2hex << [d[0].to_f, d[1].to_f, d[2].to_i, d[3]]
+      end
+    end
+    File.open("#{File.dirname(__FILE__)}/testdata_hex2ll.txt").read.each_line do |l|
+      if l.slice(0,1) != "#"
+        d = l.strip.split(',')
+        @test_hex2ll << [d[0],d[1].to_f, d[2].to_f,d[3].to_i]
       end
     end
   end  
@@ -32,18 +31,16 @@ describe GeoHex do
   end
   it "should convert coordinates to geohex code" do
     # correct answers (you can obtain this test variables from jsver_test.html )
-    @test_data.each do |v|
+    @test_ll2hex.each do |v|
       GeoHex::Zone.encode(v[0],v[1],v[2]).should == v[3]
     end
     
   end
   it "should convert geohex to coordinates " do
-  pending
     # correct answers (you can obtain this test variables from jsver_test.html )
-    @test_data.each do |v|
-      GeoHex::Zone.decode(v[3]).should == [v[0],v[1],v[2]]
+    @test_hex2ll.each do |v|
+      GeoHex::Zone.decode(v[0]).should == [v[1],v[2],v[3]]
     end
-    
   end
 
   it "should return instance from coordinates " do
@@ -55,16 +52,9 @@ describe GeoHex do
   end
 
   it "should return instance from hexcode " do
-  pending
-    geohex = GeoHex::Zone.new('132KpuG')
-    geohex.lat.should == 35.6478085
-    geohex.lon.should == 139.7173629550321
-    geohex.level.should == 1
-
-    geohex = GeoHex::Zone.new('0016C')
-    geohex.lat.should == 24.305370000000003
-    geohex.lon.should == 124.17423982869379
-    geohex.level.should == 60
-
+    geohex = GeoHex::Zone.new('wwhnTzSWp')
+    geohex.lat.should == 35.685262361266446
+    geohex.lon.should == 139.76695060729983
+    geohex.level.should == 22
   end
 end

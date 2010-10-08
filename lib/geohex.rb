@@ -26,16 +26,16 @@ module GeoHex
         @code= GeoHex::Zone.encode(@lat,@lon,@level)
       else
         @code = params.first
-        @lat,@lon,@level=self.decode(@code)
+        @lat,@lon,@level=GeoHex::Zone.decode(@code)
       end
     end
     
     def self.calcHexSize(level)
-      H_BASE/(level**2)/3;
+      H_BASE/(2**level)/3
     end
     
     def level
-      H_KEY[self.code.charAt(0)]
+      H_KEY.index(code[0,1])
     end
     def hexSize
       self.calcHexSize(self.level)
@@ -75,7 +75,7 @@ module GeoHex
       raise ArgumentError, "longitude must be between -180 and 180" if (lon < -180 || lon > 180)
       raise ArgumentError, "level must be between 0 and 24" if (level < 0 || level > 24)
       
-      h_size = H_BASE/(2**level)/3;
+      h_size = self.calcHexSize(level)
       z_xy = loc2xy(lon,lat)
       lon_grid = z_xy.x
       lat_grid = z_xy.y
@@ -145,48 +145,70 @@ module GeoHex
   
     # geohex to latlon
     def self.decode(code)
-      h_y, h_x, level, unit_x, unit_y, h_k, base_x, base_y = self.__geohex2hyhx( code )
-    
-      h_lat = ( h_k   * ( h_x + base_x ) * unit_x + ( h_y + base_y ) * unit_y ) / 2
-      h_lon = ( h_lat - ( h_y + base_y ) * unit_y ) / h_k
-      lat      = h_lat / H_GRID
-      lon      = h_lon / H_GRID
-      
-      return  lat, lon, level 
+      c_length = code.length;
+      level = H_KEY.index(code[0,1]);
+      scl = level;
+      h_size =  self.calcHexSize(level);
+      unit_x = 6.0 * h_size;
+      unit_y = 6.0 * h_size * H_K;
+      h_max = (H_BASE / unit_x + H_BASE / unit_y).round;
+      h_x = 0;
+      h_y = 0;
+
+      if (h_max >= 12960000 / 2) 
+        h_x = H_KEY.index(code[1,1]) * 12960000 + 
+          H_KEY.index(code[3,1]) * 216000 + 
+          H_KEY.index(code[5,1]) * 3600 + 
+          H_KEY.index(code[7,1]) * 60 + 
+          H_KEY.index(code[9,1]);
+        h_y = H_KEY.index(code[2,1]) * 12960000 + 
+          H_KEY.index(code[4,1]) * 216000 + 
+          H_KEY.index(code[6,1]) * 3600 + 
+          H_KEY.index(code[8,1]) * 60 + 
+          H_KEY.index(code[10,1]);
+      elsif (h_max >= 216000 / 2) 
+        h_x = H_KEY.index(code[1,1]) * 216000 + 
+          H_KEY.index(code[3,1]) * 3600 + 
+          H_KEY.index(code[5,1]) * 60 + 
+          H_KEY.index(code[7,1]);
+        h_y = H_KEY.index(code[2,1]) * 216000 + 
+          H_KEY.index(code[4,1]) * 3600 + 
+          H_KEY.index(code[6,1]) * 60 + 
+          H_KEY.index(code[8,1]);
+      elsif (h_max >= 3600 / 2) 
+        h_x = H_KEY.index(code[1,1]) * 3600 + 
+          H_KEY.index(code[3,1]) * 60 + 
+          H_KEY.index(code[5,1]);
+		h_y = H_KEY.index(code[2,1]) * 3600 + 
+          H_KEY.index(code[4,1]) * 60 + 
+          H_KEY.index(code[6,1]);
+      elsif (h_max >= 60 / 2) 
+        h_x = H_KEY.index(code[1,1]) * 60 + 
+          H_KEY.index(code[3,1]);
+        h_y = H_KEY.index(code[2,1]) * 60 + 
+          H_KEY.index(code[4,1]);
+      else
+        h_x = H_KEY.index(code[1,1]);
+        h_y = H_KEY.index(code[2,1]);
+      end
+      h_x = (h_x % 2 == 1) ? -(h_x - 1) / 2 : h_x / 2;
+      h_y = (h_y % 2 == 1) ? -(h_y - 1) / 2 : h_y / 2;
+
+      h_lat_y = (H_K * h_x * unit_x + h_y * unit_y) / 2;
+      h_lon_x = (h_lat_y - h_y * unit_y) / H_K;
+
+      h_loc = xy2loc(h_lon_x, h_lat_y);
+      return [h_loc.lat, h_loc.lon, level]
     end
   end
-  
-  
-
-  def __geohex2hyhx (hexcode)
-
-    level, c_length, code = __geohex2level( hexcode ) 
-
-    unit_x = 6.0 * level * H_SIZE
-    unit_y = 2.8 * level * H_SIZE
-    h_k    = ( ( ( 1.4 / 3 ) * H_GRID ).round.to_f ) / H_GRID
-    base_x = ( ( MIN_X_LON + MIN_X_LAT / h_k ) / unit_x ).floor.to_f
-    base_y = ( ( MIN_Y_LAT - h_k * MIN_Y_LON ) / unit_y ).floor.to_f
-
-    if ( c_length > 5 ) 
-      h_x = H_KEY.index(code[0]) * 3600 + H_KEY.index(code[2]) * 60 + H_KEY.index(code[4])
-      h_y = H_KEY.index(code[1]) * 3600 + H_KEY.index(code[3]) * 60 + H_KEY.index(code[5])
-    else 
-      h_x = H_KEY.index(code[0]) * 60   + H_KEY.index(code[2])
-      h_y = H_KEY.index(code[1]) * 60   + H_KEY.index(code[3])
-    end
     
-    return h_y, h_x, level, unit_x, unit_y, h_k, base_x, base_y 
-  end
-
-  
   def loc2xy(_lon,_lat) 
     x=_lon*H_BASE/180;
     y= Math.log(Math.tan((90+_lat)*Math::PI/360)) / (Math::PI / 180 );
-    y= y*H_BASE / 180;
+    y= y * H_BASE / 180;
     return OpenStruct.new("x"=>x, "y"=>y);
   end
-
+  
   def xy2loc(_x,_y) 
     lon=(_x/H_BASE)*180;
     lat=(_y/H_BASE)*180;

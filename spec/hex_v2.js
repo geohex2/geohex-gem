@@ -213,13 +213,13 @@ function getZoneByCode(code) {
 		h_x = h_key.indexOf(code.charAt(1));
 		h_y = h_key.indexOf(code.charAt(2));
 	}
-
 	h_x = (h_x % 2) ? -(h_x - 1) / 2 : h_x / 2;
 	h_y = (h_y % 2) ? -(h_y - 1) / 2 : h_y / 2;
 	var h_lat_y = (h_k * h_x * unit_x + h_y * unit_y) / 2;
 	var h_lon_x = (h_lat_y - h_y * unit_y) / h_k;
 
 	var h_loc = xy2loc(h_lon_x, h_lat_y);
+    var _r = new Zone(h_loc.lat, h_loc.lon, h_x, h_y, code)
 	return (_zoneCache[code] = new Zone(h_loc.lat, h_loc.lon, h_x, h_y, code));
 }
 
