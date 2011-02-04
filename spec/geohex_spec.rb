@@ -1,4 +1,4 @@
-require "#{File.dirname(__FILE__)}/../lib/geohex.rb"
+require "#{File.expand_path(File.dirname(__FILE__))}/../lib/geohex.rb"
 require "pp"
 include GeoHex
 
@@ -6,13 +6,13 @@ describe GeoHex do
   before(:all) do
     @test_ll2hex = []
     @test_hex2ll = []
-    File.open("#{File.dirname(__FILE__)}/testdata_ll2hex.txt").read.each_line do |l|
+    File.open("#{File.expand_path(File.dirname(__FILE__))}/testdata_ll2hex.txt").read.each_line do |l|
       if l.slice(0,1) != "#"
         d = l.strip.split(',')
         @test_ll2hex << [d[0].to_f, d[1].to_f, d[2].to_i, d[3]]
       end
     end
-    File.open("#{File.dirname(__FILE__)}/testdata_hex2ll.txt").read.each_line do |l|
+    File.open("#{File.expand_path(File.dirname(__FILE__))}/testdata_hex2ll.txt").read.each_line do |l|
       if l.slice(0,1) != "#"
         d = l.strip.split(',')
         @test_hex2ll << [d[0],d[1].to_f, d[2].to_f,d[3].to_i]

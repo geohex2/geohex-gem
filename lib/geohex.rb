@@ -43,7 +43,7 @@ module GeoHex
     def hexCoords
       h_lat = self.lat;
       h_lon = self.lon;
-      h_xy = GeoHex.loc2xy(h_lon, h_lat);
+      h_xy = GeoHex::Zone.loc2xy(h_lon, h_lat);
       h_x = h_xy.x
       h_y = h_xy.y
       h_deg = Math.tan(Math::PI * (60 / 180));
@@ -201,17 +201,19 @@ module GeoHex
     end
   end
     
-  def loc2xy(_lon,_lat) 
-    x=_lon*H_BASE/180;
-    y= Math.log(Math.tan((90+_lat)*Math::PI/360)) / (Math::PI / 180 );
-    y= y * H_BASE / 180;
-    return OpenStruct.new("x"=>x, "y"=>y);
-  end
-  
-  def xy2loc(_x,_y) 
-    lon=(_x/H_BASE)*180;
-    lat=(_y/H_BASE)*180;
+  class << Zone
+    def loc2xy(_lon,_lat) 
+      x=_lon*H_BASE/180;
+      y= Math.log(Math.tan((90+_lat)*Math::PI/360)) / (Math::PI / 180 );
+      y= y * H_BASE / 180;
+      return OpenStruct.new("x"=>x, "y"=>y);
+    end
+    
+    def xy2loc(_x,_y) 
+      lon=(_x/H_BASE)*180;
+      lat=(_y/H_BASE)*180;
     lat=180.0/Math::PI*(2.0*Math.atan(Math.exp(lat*Math::PI/180))-Math::PI/2);
-    return OpenStruct.new("lon" => lon,"lat" => lat);
+      return OpenStruct.new("lon" => lon,"lat" => lat);
+    end
   end
 end
