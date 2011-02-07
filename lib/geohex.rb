@@ -7,7 +7,7 @@ require 'rubygems'
 require 'ostruct'
 
 module GeoHex
-  VERSION = '2.0.0'
+  VERSION = '2.0.1'
 
   H_KEY = "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   H_BASE = 20037508.34;
