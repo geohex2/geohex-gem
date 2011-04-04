@@ -1,4 +1,6 @@
-require "#{File.expand_path(File.dirname(__FILE__))}/../lib/geohex.rb"
+$: << File.expand_path(File.dirname(__FILE__) + "/../lib/")
+require "geohex"
+require "geohex/v3"
 require "pp"
 include GeoHex
 
@@ -52,5 +54,19 @@ describe GeoHex do
     geohex.lat.should == 35.685262361266446
     geohex.lon.should == 139.76695060729983
     geohex.level.should == 22
+  end
+
+  context GeoHex::V3 do
+    it "should return encode from coordinates to hexcode in V3" do
+      lat, lng, level = 33.35137950146622, 135.6104480957031, 0
+      GeoHex::V3.encode(lat, lng, level)[:code].should == "XM"
+    end
+
+    it "should convert coordinates to geohex code version V3" do
+      load_data(:v3_encode) do |d|
+        lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
+        GeoHex::V3.encode(lat, lng, level)[:code].should == geohex
+      end
+    end
   end
 end
