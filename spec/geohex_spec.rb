@@ -68,5 +68,22 @@ describe GeoHex do
         GeoHex::V3.encode(lat, lng, level)[:code].should == geohex
       end
     end
+
+    it "should return decode from hexcode to coordinates in V3" do
+      lat, lng, level = 32.70505659484853,140,0
+      coordinates = GeoHex::V3.decode("XM")
+      coordinates[:lat].should == lat
+      coordinates[:lng].should == lng
+      coordinates[:level].should == level
+    end
+
+    it "should convert coordinates to geohex code version V3" do
+      load_data(:v3_decode) do |d|
+        lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
+        coordinates = GeoHex::V3.decode(geohex)
+        coordinates[:lat].should == lat
+        coordinates[:lng].should == lng
+      end
+    end
   end
 end

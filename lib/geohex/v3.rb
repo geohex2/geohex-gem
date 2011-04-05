@@ -114,5 +114,76 @@ module GeoHex
       }
       return ret
     end
+
+    def self.decode(code)
+      level  = code.size
+      h_size = calcHexSize(level)
+      unit_x = 6 * h_size
+      unit_y = 6 * h_size * H_K
+      h_x    = 0
+      h_y    = 0
+      h_dec9 = (H_KEY.index(code[0]) * 30 + H_KEY.index(code[1])).to_s + code[2..-1]
+
+      if  h_dec9[1] =~ /[^125]/ &&
+          h_dec9[2] =~ /[^125]/
+        h_dec9[0] = '7' if h_dec9[0] == "5"
+        h_dec9[0] = '3' if h_dec9[0] == "1"
+      end
+
+      d9xlen = h_dec9.size
+      (level+1-d9xlen).times do |n|
+        h_dec9 = '0' + h_dec9
+        d9xlen += 1
+      end
+      h_dec3 = ''
+
+      d9xlen.times do |i|
+        h_dec0 = h_dec9[i].to_i.to_s 3
+        if h_dec0.size == 0
+          h_dec3 << "00"
+        elsif h_dec0.size == 1
+          h_dec3 << "0"
+        end
+        h_dec3 << h_dec0.to_s
+      end
+
+      h_decx = []
+      h_decy = []
+
+      (h_dec3.size/2).times do |i|
+        h_decx << h_dec3[i*2]
+        h_decy << h_dec3[i*2+1]
+      end
+
+      0.upto(level) do |i|
+        h_pow = 3 ** (level - i)
+        if h_decx[i].to_i == 0
+          h_x -= h_pow
+        elsif h_decx[i].to_i == 2
+          h_x += h_pow
+        end
+
+        if h_decy[i].to_i == 0
+          h_y -= h_pow
+        elsif h_decy[i].to_i == 2
+          h_y += h_pow
+        end
+      end
+
+      h_lat_y = (H_K * h_x * unit_x + h_y * unit_y) / 2
+      h_lon_x = (h_lat_y - h_y * unit_y) / H_K
+
+      h_loc = xy2loc(h_lon_x, h_lat_y)
+      h_loc.lon -= 360 if h_loc.lon > 180
+      h_loc.lon += 360 if h_loc.lon < -180
+
+      return {
+        :x => h_x,
+        :y => h_y,
+        :code => code,
+        :lat => h_loc.lat,
+        :lng => h_loc.lon,
+      }
+    end
   end
 end
