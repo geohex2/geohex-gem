@@ -81,4 +81,23 @@ describe GeoHex do
       end
     end
   end
+
+  context GeoHex::V3::Zone do
+    it "should return instance" do
+      lat, lng, level = 33.35137950146622, 135.6104480957031, 0
+      geohex = GeoHex::V3::Zone.encode(lat,lng,level)
+      geohex.code.should == "XM"
+      geohex.level.should == 0
+      geohex.lat.should == lat
+      geohex.lon.should == lng
+    end
+
+    it "should return instance from hexcode " do
+      geohex = GeoHex::V3::Zone.decode('XM')
+      geohex.code.should == "XM"
+      geohex.lat.should == 32.70505659484853
+      geohex.lon.should == 140
+      geohex.level.should == 0
+    end
+  end
 end

@@ -2,13 +2,41 @@ module GeoHex
   module V3
     H_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
+    class Zone < GeoHex::Zone
+      attr_accessor :version, :level
+      def self.encode(lat,lng,level)
+       self.new(lat,lng,level)
+      end
+
+      def self.decode(hexcode)
+        self.new(hexcode)
+      end
+
+      def initialize(*params)
+        if params.size == 0
+          raise ArgumentError, "lat,lng,level or hexcode is needed"
+        end
+        @version = 3
+        if params.size == 3
+          @lat,@lon,@level = *params
+          hash = GeoHex::V3._encode(@lat,@lon,@level)
+          @x,@y,@code = hash[:x],hash[:y],hash[:code]
+        else
+          @code = params.first
+          @level = @code.size - 2
+          hash = GeoHex::V3._decode(@code)
+          @x,@y,@lat,@lon = hash[:x],hash[:y],hash[:lat],hash[:lon]
+        end
+      end
+    end
+
     def self.encode(lat,lng,level)
       _encode(lat,lng,level)[:code]
     end
 
     def self.decode(hexcode)
       hash = _decode(hexcode)
-      [hash[:lat],hash[:lng]]
+      [hash[:lat],hash[:lon]]
     end
 
     def self.calcHexSize(level)
@@ -193,7 +221,7 @@ module GeoHex
         :y => h_y,
         :code => code,
         :lat => h_loc.lat,
-        :lng => h_loc.lon,
+        :lon => h_loc.lon,
       }
     end
   end
