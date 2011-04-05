@@ -1,6 +1,16 @@
 module GeoHex
   module V3
     H_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
+
+    def self.encode(lat,lng,level)
+      _encode(lat,lng,level)[:code]
+    end
+
+    def self.decode(hexcode)
+      hash = _decode(hexcode)
+      [hash[:lat],hash[:lng]]
+    end
+
     def self.calcHexSize(level)
       H_BASE/(3**(level+1))
     end
@@ -19,7 +29,8 @@ module GeoHex
       return OpenStruct.new("lon" => lon,"lat" => lat);
     end
 
-    def self.encode(lat,lng,level)
+    private
+    def self._encode(lat,lng,level)
       level   += 2
       h_size   = calcHexSize(level)
       z_xy     = loc2xy(lng, lat)
@@ -115,7 +126,7 @@ module GeoHex
       return ret
     end
 
-    def self.decode(code)
+    def self._decode(code)
       level  = code.size
       h_size = calcHexSize(level)
       unit_x = 6 * h_size

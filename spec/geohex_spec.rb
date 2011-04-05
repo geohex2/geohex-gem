@@ -59,30 +59,25 @@ describe GeoHex do
   context GeoHex::V3 do
     it "should return encode from coordinates to hexcode in V3" do
       lat, lng, level = 33.35137950146622, 135.6104480957031, 0
-      GeoHex::V3.encode(lat, lng, level)[:code].should == "XM"
+      GeoHex::V3.encode(lat, lng, level).should == "XM"
     end
 
     it "should convert coordinates to geohex code version V3" do
       load_data(:v3_encode) do |d|
         lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
-        GeoHex::V3.encode(lat, lng, level)[:code].should == geohex
+        GeoHex::V3.encode(lat, lng, level).should == geohex
       end
     end
 
     it "should return decode from hexcode to coordinates in V3" do
       lat, lng, level = 32.70505659484853,140,0
-      coordinates = GeoHex::V3.decode("XM")
-      coordinates[:lat].should == lat
-      coordinates[:lng].should == lng
-      coordinates[:level].should == level
+      GeoHex::V3.decode("XM").should == [lat,lng]
     end
 
     it "should convert coordinates to geohex code version V3" do
       load_data(:v3_decode) do |d|
         lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
-        coordinates = GeoHex::V3.decode(geohex)
-        coordinates[:lat].should == lat
-        coordinates[:lng].should == lng
+        GeoHex::V3.decode(geohex).should == [lat,lng]
       end
     end
   end
