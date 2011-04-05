@@ -2,7 +2,7 @@ module GeoHex
   module V3
     H_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
-    class Zone < GeoHex::Zone
+    class Zone
       attr_accessor :version, :level
       def self.encode(lat,lng,level)
        self.new(lat,lng,level)

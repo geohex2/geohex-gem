@@ -32,6 +32,11 @@ http://twitter.com/hal_sk  (ja)
    => '132KpuG' 
    GeoHex.decode('0dMV')
    => [24.338279000000004,124.1577708779443,7]
+   # want to use version 3
+   GeoHex::V3.encode(33.35137950146622, 135.6104480957031, 0)
+   => 'XM'
+   GeoHex::V3.decode("XM")
+   => [32.70505659484853, 140.0]
 
 ## FEATURES
 
@@ -42,6 +47,13 @@ http://twitter.com/hal_sk  (ja)
    geohex = GeoHex.decode('0dMV')
    geohex.lat
    => 24.338279000000004
+   # want to use version 3
+   geohex = GeoHex::V3::Zone.new(33.35137950146622, 135.6104480957031, 0)
+   geohex.code
+   => 'xm'
+   geohex = GeoHex::V3::Zone.new('XM')
+   geohex.lat
+   => 32.70505659484853
 
 ## LICENSE
 
