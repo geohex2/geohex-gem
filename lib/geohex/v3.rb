@@ -3,7 +3,7 @@ module GeoHex
     H_KEY = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 
     class Zone
-      attr_accessor :version, :level
+      attr_reader :version, :level, :code, :x, :y, :lat, :lon
       def self.encode(lat,lng,level)
        self.new(lat,lng,level)
       end
