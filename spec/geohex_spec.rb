@@ -77,7 +77,9 @@ describe GeoHex do
     it "should convert coordinates to geohex code version V3" do
       load_data(:v3_decode) do |d|
         lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
-        GeoHex::V3.decode(geohex).should == [lat,lng]
+        rlat,rlng = GeoHex::V3.decode(geohex)
+        rlat.should be_within(0.000001).of(lat)
+        rlng.should be_within(0.000001).of(lng)
       end
     end
   end

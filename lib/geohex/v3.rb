@@ -142,7 +142,7 @@ module GeoHex
       h_2    = h_code[3..-1]
       h_a1   = h_1 / 30
       h_a2   = h_1 % 30
-      h_code = H_KEY[h_a1] + H_KEY[h_a2] + h_2
+      h_code = H_KEY.split(//)[h_a1] + H_KEY.split(//)[h_a2] + h_2
 
       ret = {
         :x => h_x,
@@ -177,7 +177,7 @@ module GeoHex
       h_dec3 = ''
 
       d9xlen.times do |i|
-        h_dec0 = h_dec9[i].to_i.to_s 3
+        h_dec0 = h_dec9.split(//)[i].to_i.to_s 3
         if h_dec0.size == 0
           h_dec3 << "00"
         elsif h_dec0.size == 1
@@ -190,8 +190,8 @@ module GeoHex
       h_decy = []
 
       (h_dec3.size/2).times do |i|
-        h_decx << h_dec3[i*2]
-        h_decy << h_dec3[i*2+1]
+        h_decx << h_dec3.split(//)[i*2]
+        h_decy << h_dec3.split(//)[i*2+1]
       end
 
       0.upto(level) do |i|
@@ -214,7 +214,10 @@ module GeoHex
 
       h_loc = xy2loc(h_lon_x, h_lat_y)
       h_loc.lon -= 360 if h_loc.lon > 180
-      h_loc.lon += 360 if h_loc.lon < -180
+      # particular case in ruby 1.8.7
+      # h_loc.lon.to_s  => -180.0
+      # h_loc.lon <= -180 => false
+      h_loc.lon += 360 if h_loc.lon.to_s.to_f <= -180
 
       return {
         :x => h_x,
