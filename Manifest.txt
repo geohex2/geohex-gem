@@ -3,4 +3,5 @@ Manifest.txt
 README.txt
 Rakefile
 lib/geohex.rb
+lib/geohex/v3.rb
 spec/geohex_spec.rb

@@ -1,25 +1,20 @@
-require "#{File.expand_path(File.dirname(__FILE__))}/../lib/geohex.rb"
+$: << File.expand_path(File.dirname(__FILE__) + "/../lib/")
+require "geohex"
+require "geohex/v3"
 require "pp"
 include GeoHex
 
+def load_data(key)
+  data_dir = File.expand_path(File.dirname(__FILE__))
+  File.open("#{data_dir}/testdata_#{key}.txt").read.each_line do |l|
+    if l.slice(0,1) != "#"
+      d = l.strip.split(',')
+      yield d
+    end
+  end
+end
+
 describe GeoHex do
-  before(:all) do
-    @test_ll2hex = []
-    @test_hex2ll = []
-    File.open("#{File.expand_path(File.dirname(__FILE__))}/testdata_ll2hex.txt").read.each_line do |l|
-      if l.slice(0,1) != "#"
-        d = l.strip.split(',')
-        @test_ll2hex << [d[0].to_f, d[1].to_f, d[2].to_i, d[3]]
-      end
-    end
-    File.open("#{File.expand_path(File.dirname(__FILE__))}/testdata_hex2ll.txt").read.each_line do |l|
-      if l.slice(0,1) != "#"
-        d = l.strip.split(',')
-        @test_hex2ll << [d[0],d[1].to_f, d[2].to_f,d[3].to_i]
-      end
-    end
-  end  
-  
   it "should throw error if parameters is not valid" do
     lambda { GeoHex::Zone.encode() }.should raise_error(ArgumentError) # no parameters
     lambda { GeoHex::Zone.encode(-86,100,0) }.should raise_error(ArgumentError) # invalid latitude
@@ -29,17 +24,20 @@ describe GeoHex do
     lambda { GeoHex::Zone.encode(0,180,-1) }.should raise_error(ArgumentError) # invalid level
     lambda { GeoHex::Zone.encode(0,-180,25) }.should raise_error(ArgumentError) # invalid level
   end
-  it "should convert coordinates to geohex code" do
+
+  it "should convert coordinates to geohex code version 2" do
     # correct answers (you can obtain this test variables from jsver_test.html )
-    @test_ll2hex.each do |v|
-      GeoHex::Zone.encode(v[0],v[1],v[2]).should == v[3]
+    load_data(:v2_encode) do |d|
+      lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
+      GeoHex::Zone.encode(lat, lng, level).should == geohex
     end
-    
   end
-  it "should convert geohex to coordinates " do
+
+  it "should convert geohex to coordinates version 2" do
     # correct answers (you can obtain this test variables from jsver_test.html )
-    @test_hex2ll.each do |v|
-      GeoHex::Zone.decode(v[0]).should == [v[1],v[2],v[3]]
+    load_data(:v2_decode) do |d|
+      geohex, lat, lng, level = d[0],d[1].to_f, d[2].to_f,d[3].to_i
+      GeoHex::Zone.decode(geohex).should == [lat,lng,level]
     end
   end
 
@@ -56,5 +54,52 @@ describe GeoHex do
     geohex.lat.should == 35.685262361266446
     geohex.lon.should == 139.76695060729983
     geohex.level.should == 22
+  end
+
+  context GeoHex::V3 do
+    it "should return encode from coordinates to hexcode in V3" do
+      lat, lng, level = 33.35137950146622, 135.6104480957031, 0
+      GeoHex::V3.encode(lat, lng, level).should == "XM"
+    end
+
+    it "should convert coordinates to geohex code version V3" do
+      load_data(:v3_encode) do |d|
+        lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
+        GeoHex::V3.encode(lat, lng, level).should == geohex
+      end
+    end
+
+    it "should return decode from hexcode to coordinates in V3" do
+      lat, lng, level = 32.70505659484853,140,0
+      GeoHex::V3.decode("XM").should == [lat,lng]
+    end
+
+    it "should convert coordinates to geohex code version V3" do
+      load_data(:v3_decode) do |d|
+        lat, lng, level, geohex = d[0].to_f, d[1].to_f, d[2].to_i, d[3]
+        rlat,rlng = GeoHex::V3.decode(geohex)
+        rlat.should be_within(0.000001).of(lat)
+        rlng.should be_within(0.000001).of(lng)
+      end
+    end
+  end
+
+  context GeoHex::V3::Zone do
+    it "should return instance" do
+      lat, lng, level = 33.35137950146622, 135.6104480957031, 0
+      geohex = GeoHex::V3::Zone.encode(lat,lng,level)
+      geohex.code.should == "XM"
+      geohex.level.should == 0
+      geohex.lat.should == lat
+      geohex.lon.should == lng
+    end
+
+    it "should return instance from hexcode " do
+      geohex = GeoHex::V3::Zone.decode('XM')
+      geohex.code.should == "XM"
+      geohex.lat.should == 32.70505659484853
+      geohex.lon.should == 140
+      geohex.level.should == 0
+    end
   end
 end
